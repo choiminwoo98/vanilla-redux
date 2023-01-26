@@ -4,15 +4,13 @@ import {
     createReducer,
     PayloadAction,
     configureStore,
+    createSlice,
 } from "@reduxjs/toolkit";
 
 interface toDoProps {
     id: number;
     text: string;
 }
-
-const addToDo = createAction("ADD");
-const deleteToDo = createAction("DELETE");
 
 // pure redux
 // const counterReducer = (state: any = [], action: PayloadAction<string>) => {
@@ -27,29 +25,50 @@ const deleteToDo = createAction("DELETE");
 //             return state;
 //     }
 // };
-const counterReducer = createReducer(
-    [],
 
-    // callback사용
-    (builder: any) =>
-        builder
-            .addCase(addToDo, (state: any[], action: PayloadAction<string>) => {
-                state.push({ text: action.payload, id: Date.now() });
-            })
-            .addCase(
-                deleteToDo,
-                (state: any[], action: PayloadAction<string>) => {
-                    return state.filter(
-                        (toDo: toDoProps) => toDo.id !== +action.payload
-                    );
-                }
-            )
-);
-const store = configureStore({ reducer: counterReducer });
+// const addToDo = createAction("ADD");
+// const deleteToDo = createAction("DELETE");
 
-export const actionCreators = {
-    addToDo,
-    deleteToDo,
-};
+// const counterReducer = createReducer(
+//     [],
+
+//     // callback사용
+//     (builder: any) =>
+//         builder
+//             .addCase(addToDo, (state: any[], action: PayloadAction<string>) => {
+//                 state.push({ text: action.payload, id: Date.now() });
+//             })
+//             .addCase(
+//                 deleteToDo,
+//                 (state: any[], action: PayloadAction<string>) => {
+//                     return state.filter(
+//                         (toDo: toDoProps) => toDo.id !== +action.payload
+//                     );
+//                 }
+//             )
+// );
+
+const toDos = createSlice({
+    name: "toDosReducer",
+    initialState: [],
+    reducers: {
+        add: (state: any[], action: PayloadAction<string>) => {
+            state.push({ text: action.payload, id: Date.now() });
+        },
+        remove: (state: any, action: PayloadAction<string>) => {
+            return state.filter(
+                (toDo: toDoProps) => toDo.id !== +action.payload
+            );
+        },
+    },
+});
+const store = configureStore({ reducer: toDos.reducer });
+
+// export const actionCreators = {
+//     addToDo,
+//     deleteToDo,
+// };
+
+export const { add, remove } = toDos.actions;
 
 export default store;

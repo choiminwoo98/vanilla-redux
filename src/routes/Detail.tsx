@@ -1,7 +1,7 @@
 import { AnyMxRecord } from "dns";
 import { connect } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { actionCreators } from "../store";
+import { add, remove } from "../store";
 
 function Detail(toDos: any, onBtnClick: any) {
     const id = useParams().id;
@@ -25,6 +25,6 @@ function mapStateToProps(state: any) {
     return { toDos: state };
 }
 function mapDispatchToProps(dispatch: any) {
-    return { onBtnClick: (id: any) => dispatch(actionCreators.deleteToDo(id)) };
+    return { onBtnClick: (id: any) => dispatch(remove(id)) };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Detail);
